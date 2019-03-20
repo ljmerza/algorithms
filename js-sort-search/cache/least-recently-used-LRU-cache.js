@@ -12,7 +12,7 @@
  * Bad for temporal locality
  */
 
-function DLLNode(key, data) {
+function DllNode(key, data) {
     this.key = key;
     this.data = data;
 
@@ -20,18 +20,18 @@ function DLLNode(key, data) {
     this.prev = null;
 }
 
-function LRUCache(capacity) {
+function LruCache(capacity) {
     this.keys = {};
     this.capacity = capacity;
 
-    this.head = new DLLNode('', null);
-    this.tail = new DLLNode('', null);
+    this.head = new DllNode('', null);
+    this.tail = new DllNode('', null);
 
     this.head.next = this.tail;
     this.tail.prev = this.head;
 }
 
-LRUCache.prototype.removeNode = function (node) {
+LruCache.prototype.removeNode = function (node) {
     const prev = node.prev;
     const next = node.next;
     prev.next = next;
@@ -39,7 +39,7 @@ LRUCache.prototype.removeNode = function (node) {
 }
 
 // adds new node at tail
-LRUCache.prototype.addNode = function (node) {
+LruCache.prototype.addNode = function (node) {
     const realTail = this.tail.prev;
     realTail.next = node;
 
@@ -48,24 +48,23 @@ LRUCache.prototype.addNode = function (node) {
     node.next = this.tail;
 }
 
-LRUCache.prototype.get = function(key){
+LruCache.prototype.get = function(key){
     const node = this.keys[key];
     if(node == undefined) return null;
 
-    // if we found node then remove node and add at head
     this.removeNode(node);
     this.addNode(node);
-    return node.data ;
+    return node.data;
 }
 
-LRUCache.prototype.set = function (key, value){
+LruCache.prototype.set = function (key, value){
 
     // remove node from 'old' position
     const node = this.keys[key];
     if(node) this.removeNode(node);
 
     // create new node and add at tail
-    const newNode = new DLLNode(key, value);
+    const newNode = new DllNode(key, value);
     this.addNode(newNode);
     this.keys[key] = newNode;
 
@@ -77,7 +76,7 @@ LRUCache.prototype.set = function (key, value){
     }
 }
 
-const myLRU = new LRUCache(5);
+const myLRU = new LruCache(5);
 
 myLRU.set(1, 1); // 1
 myLRU.set(2, 2); // 1 <-> 2
